@@ -1,0 +1,135 @@
+\documentclass{paper}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+%
+\usepackage{paralist}
+\usepackage{float}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage[capitalise]{cleveref}
+\usepackage[utf8]{inputenc}
+\usepackage[autostyle=false, style=english]{csquotes}
+\usepackage{listings}
+\usepackage[justification=centering]{caption} % centre-align listings captions
+\usepackage{lstlinebgrd}
+\usepackage{graphicx}
+\usepackage{ucs}
+\usepackage{fixltx2e}
+\usepackage{subcaption}
+\usepackage{fancyvrb}
+\usepackage{xspace}
+%\usepackage{fullpage}
+\usepackage{stmaryrd}
+
+
+% Force all figures & tables to use bottom captions
+%\floatstyle{plain}
+%\restylefloat{figure}
+%\restylefloat{table}
+
+% Make all figures and tables absolutely-positioned by default
+%\floatplacement{figure}{H}
+%\floatplacement{table}{H}
+
+% !! Hacky solution !! Reduce the size of verbatim font to prevent overflow
+% \fvset{fontsize=\tiny}
+
+%\MakeOuterQuote{"}
+
+\hypersetup{%
+	colorlinks,
+	citecolor=black,
+	filecolor=black,
+	linkcolor=black,
+	urlcolor=black
+}
+
+\newcommand{\todo}[1]{%
+\begin{center}%
+  \fbox{%
+    \begin{minipage}{0.95\columnwidth}\small
+      \textcolor{red}{\textbf{TODO:} #1}
+    \end{minipage}%
+  }
+\end{center}
+}
+\newcommand{\keyword}[1]{\mathsf{#1}}
+\newcommand{\kwboolean}{\keyword{boolean}}
+\newcommand{\kwint}{\keyword{int}}
+\newcommand{\kwfloat}{\keyword{float}}
+\newcommand{\kwdouble}{\keyword{double}}
+\newcommand{\kwpublic}{\keyword{public}}
+\newcommand{\kwprivate}{\keyword{private}}
+\newcommand{\kwprotected}{\keyword{protected}}
+\newcommand{\kwstatic}{\keyword{static}}
+\newcommand{\kwfinal}{\keyword{final}}
+\newcommand{\kwnull}[0]{\keyword{null}}
+\newcommand{\kwnew}[0]{\keyword{new}}
+\newcommand{\kwextends}[0]{\keyword{extends}}
+\newcommand{\kwclass}[0]{\keyword{class}}
+\newcommand{\kwthis}[0]{\keyword{this}}
+\newcommand{\kwsuper}[0]{\keyword{super}}
+\newcommand{\kwif}[0]{\keyword{if}}
+\newcommand{\kwthen}[0]{\keyword{then}}
+\newcommand{\kwelse}[0]{\keyword{else}}
+\newcommand{\kwskip}[0]{\keyword{skip}}
+\newcommand{\kwfielddef}{\keyword{field\mbox{-}def}}
+\newcommand{\kwmethoddef}{\keyword{method\mbox{-}def}}
+\newcommand{\kwarglist}{\keyword{arg\mbox{-}list}}
+\newcommand{\kwloc}[1]{\keyword{loc}(#1)}
+
+\newcommand{\tuple}[1]{\langle #1 \rangle}
+\newcommand{\suc}{\texttt{succ}}
+\newcommand{\nxt}{\texttt{next}}
+\newcommand{\LT}{\longrightarrow}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\sem}[1]{\llbracket #1\rrbracket}
+\newcommand{\T}{\mathcal{T}}
+
+%%%%%% NOTE: Page 15-page limit for SAS'18 (excl. bib+app) %%%%%%
+
+%
+\begin{document}
+\title{A Simple Type-Based Points-to Analysis}
+\author{\today}
+
+\maketitle
+
+We take a simplified syntax from the website~\cite{amoeller-web} for the Java Programming language, specified in EBNF.
+
+\begin{figure}[!htbp]\centering
+	\begin{tabular}[c]{lll} 
+        $prog$&$::=$&$C^*$\\
+		$C$&$::=$&$\kwclass\ A\ [\kwextends\ B] \ \{\kwfielddef;\ \kwmethoddef\}$\\
+        $\kwfielddef$&$::=$&$f{=}e\ |\ \kwfielddef; \kwfielddef$\\
+		$\kwmethoddef$&$::=$&$m(x) \ \{s\}\ |\ \kwmethoddef; \kwmethoddef$\\
+		$s$&$::=$&$\ \epsilon |\  x {=} e \ |\ x.f{=}x \ |\ x.m(\kwarglist)$ \\
+		&&$|\ \kwif \ x \ \kwthen \ s \ \kwelse \ s \ |\ s;s$\\
+		$e$&$::=$&$c \ |\ x \ |\ x.f\ |\ \kwnew \ A(\kwarglist)\ |\ x.m(\kwarglist)$\\
+        $\kwarglist$&$::=$&$e\ |\ e,\kwarglist$\\
+        $c$&$::=$&$n$ where $n\in\mathbb{R}$\\
+	\end{tabular}
+	\caption{The starting syntax of Java. \label{fig:syntax}}
+\end{figure}
+
+For this simplified Java syntax, we omit some of the basic Java syntax, such as basic types (e.g., $\kwboolean$, $\kwint$, $\kwdouble$), constructor and field modifiers (e.g., $\kwpublic$, $\kwprivate$, $\kwstatic$, $\kwfinal$), the interface structure, exception handling, and specialized keywords (e.g., $\kwthis$, $\kwsuper$). We assume the ways of handling such structures can be added straightforwardly on this minimized syntax. Moreover, we assume that a given program has always correct syntax, otherwise it will not pass compilation. We assume values are within ranges of their defined variables, and we ignore the cases of overflows.
+
+%%% objects are location based, points-to algrithm Andersen-styled, filed sensitive and object sensitive (not flow- or context-sensitive)
+
+
+
+
+\begin{thebibliography}{4}
+
+\bibitem{amoeller-web} 
+A. M$\o$ller.
+https://users-cs.au.dk/amoeller/RegAut/JavaBNF.html
+ 
+\bibitem{andersen-94}
+L. O. Andersen. 
+Program Analysis and Specialization for the C Programming Language. 
+PhD thesis, University of Copenhagen, DIKU, 1994.
+
+\end{thebibliography}
+\end{document}
